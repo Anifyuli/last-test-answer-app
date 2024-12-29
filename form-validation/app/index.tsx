@@ -15,6 +15,7 @@ export default function App() {
   const [phone, setPhone] = useState<string>('');
   const [contacts, setContacts] = useState<Contact[]>([]);
 
+  // Penggunaan useEffect untuk sinkronisasi data
   useEffect(() => {
     const loadContacts = async () => {
       try {
@@ -30,6 +31,7 @@ export default function App() {
     loadContacts();
   }, []);
 
+  // Callback untuk menyimpan kontak
   const saveContacts = async (newContacts: Contact[]) => {
     try {
       await AsyncStorage.setItem('contacts', JSON.stringify(newContacts));
@@ -38,6 +40,7 @@ export default function App() {
     }
   };
 
+  // Callback untuk menambahkan kontak baru
   const handleAddContact = () => {
     if (!name.trim()) {
       Alert.alert('Error', 'Name cannot be empty.');
@@ -49,16 +52,21 @@ export default function App() {
       return;
     }
 
+    // Mendefinisikan kontak baru yang inherit tipedata dari Contact dengan id tanggal sekarang, nama, dan nomor telepon
     const newContact: Contact = { id: Date.now().toString(), name, phone };
+    // Variabel untuk menampung kontak yang sudah diperbarui ke sumber data
     const updatedContacts = [...contacts, newContact];
+    // Pemanggilan member useState untuk memperbarui data kontak
     setContacts(updatedContacts);
     saveContacts(updatedContacts);
 
+    // Menampilkan dialog jika kontak berhasil disimpan dengan menampilkan nama beserta nomor telepon
     Alert.alert('Success', `Contact added:\nName: ${name}\nPhone: ${phone}`);
     setName('');
     setPhone('');
   };
 
+  // Menampilkan per data kontak
   const renderContact = ({ item }: { item: Contact }) => (
     <View style={styles.contactItem}>
       <Text style={styles.contactText}>{item.name}</Text>
@@ -66,6 +74,7 @@ export default function App() {
     </View>
   );
 
+  // Tampilan aplikasi
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add Contact</Text>
@@ -94,6 +103,7 @@ export default function App() {
   );
 }
 
+// Percantik aplikasi
 const styles = StyleSheet.create({
   container: {
     flex: 1,
